@@ -18,7 +18,7 @@ export default function Home() {
                         behavior: 'smooth'
                     })
                 }}
-                    className="w-25 h-10 unbounded text-white bg-amber-600 mt-5 rounded-2xl treansition-all duration-200 hover:-translate-y-1 hover:bg-amber-400 cursor-pointer hover:scale-110">За нас</button>
+                    className="w-25 h-10 unbounded text-white bg-amber-600 mt-5 rounded-2xl treansition-all duration-200 hover:-translate-y-1 hover:bg-amber-500 cursor-pointer hover:scale-110">За нас</button>
             </section>
             <section ref={aboutRef} className="w-screen h-1/2 text-3xl p-15 unbounded flex flex-col justify-baseline">
                 <h1 className="overflow-x-hidden h-15">Какво е <a className="text-amber-600 overflow-hidden font-bold">FitMate</a>?</h1>

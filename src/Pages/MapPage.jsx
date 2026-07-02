@@ -4,9 +4,7 @@ export default function ProfilePage(){
 
     return(
         <>
-        <section className="w-screen h-screen bg-gray-100">
-
-        </section>
+        
         </>
     )
 }
