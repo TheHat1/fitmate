@@ -14,23 +14,24 @@ function App() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    checkUserStatus()
     if (address.pathname == "/#") {
       setShowForm([true,false])
     }
   }, [address])
 
   async function checkUserStatus(){
-    const {data, error} = await supabase.auth.getUser()
+    const {data, error} = await supabase.auth.getSession()
 
-    if(data){
-      return true
+    if(data.session == null){
+      setIsLoggedIn(false)
     }
-    else false
+    else setIsLoggedIn(true)
   }
 
   useEffect(()=>{
-    setIsLoggedIn(checkUserStatus)
-  },[])
+    checkUserStatus()
+  },[showForm])
 
   return (
     <>
@@ -65,7 +66,7 @@ function App() {
           <div className="overflow-y-hidden flex flex-col font-extralight max-w-25 w-full ">
             <a className="font-normal border-b">Страници</a>
             <a className="pl-3 transition-all duration-150 hover:brightness-50 hover:translate-x-2 cursor-pointer"  onClick={()=>{navigate('/')}}>Начало</a>
-            <a className="pl-3 transition-all duration-150 hover:brightness-50 hover:translate-x-2 cursor-pointer" onClick={()=>{navigate('/profile')}}>Профил</a>
+            <a className="pl-3 transition-all duration-150 hover:brightness-50 hover:translate-x-2 cursor-pointer" onClick={()=>{isLoggedIn ? navigate('/profile'): setShowForm([true,false])}}>Профил</a>
             <a className="pl-3 transition-all duration-150 hover:brightness-50 hover:translate-x-2 cursor-pointer" onClick={()=>{navigate('/map')}}>Карта</a>
           </div>
           <div className="overflow-hidden">

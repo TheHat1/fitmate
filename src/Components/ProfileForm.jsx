@@ -30,9 +30,11 @@ export default function Form({ open, isSignup, setShowForm }) {
 
     function handleFormButton() {
         if (username.trim() == "") {
-            setIsError(true)
-            setErrorMsg("Името е задължително поле")
-            return
+            if (isSignup) {
+                setIsError(true)
+                setErrorMsg("Името е задължително поле")
+                return
+            }
         }
 
         if (email.trim() == "") {
@@ -69,11 +71,12 @@ export default function Form({ open, isSignup, setShowForm }) {
 
             setInProgress(true)
 
-            const {data, error} = await supabase.auth.signInWithPassword({
+            const { data, error } = await supabase.auth.signInWithPassword({
                 email: email,
                 password: password
             })
-            
+
+            setShowForm([false, false])
             navigate('/profile')
 
         } catch (err) {
