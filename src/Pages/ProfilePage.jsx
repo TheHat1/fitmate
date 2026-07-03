@@ -3,12 +3,14 @@ import supabase from "../Backend/supabase"
 import { useNavigate } from "react-router-dom"
 import ActivitieCard from "../Components/ActivitieCard"
 import FilterSelector from "../Components/FilterSelector"
+import fetchUserPFP from "../Backend/fetchUserPFP"
+import uploadUserPFP from "../Backend/uploadUserPFP"
 
 export default function ProfilePage() {
     const [pfp, setPfp] = useState('/Icons/user.png')
     const [username, setUsername] = useState('user')
     const [email, setEmail] = useState("abc@abc.abc")
-    let userid
+    const [userid, setUserid] = useState()
     const [file, setFile] = useState(null)
     const inputRef = useRef()
     const navigate = useNavigate()
@@ -16,6 +18,7 @@ export default function ProfilePage() {
     const [activities, setActivities] = useState()
     const [activities_json, setActivities_json] = useState([])
     const [filterBy, setFilterBy] = useState([""])
+    const [loading, setLoading] = useState(false)
 
     function handlePFPupload() {
         inputRef.current.click()
@@ -26,7 +29,9 @@ export default function ProfilePage() {
             const { data, error } = await supabase.auth.getUser()
             setUsername(data?.user?.user_metadata.full_name)
             setEmail(data?.user?.user_metadata.email)
-            userid = data?.user?.user_metadata.id
+            setUserid(data?.user?.user_metadata.id)
+            let url = await fetchUserPFP()
+            setPfp(url)
         } catch (err) {
             console.error(err)
         }
@@ -60,6 +65,12 @@ export default function ProfilePage() {
         }
     }
 
+    useEffect(() => {
+        if (loading) return
+        if (file == null) return
+        uploadUserPFP(file, setLoading)
+    }, [file])
+
     function displayActivitieCards() {
         let filtered_json
 
@@ -68,7 +79,7 @@ export default function ProfilePage() {
         } else {
             filtered_json = activities_json
         }
-        if(filterBy.length > 1){
+        if (filterBy.length > 1) {
             filtered_json = filtered_json.filter((e) => filterBy.includes(e.type))
         }
 
@@ -98,6 +109,7 @@ export default function ProfilePage() {
     return (
         <>
             <section className="w-screen h-[calc(100vh-92px)] bg-black">
+                <div className={`fixed top-0 w-full h-full backdrop-blur-sm bg-black/70 transition-all duration-300 ${loading ? "z-50 opacity-100":"-z-50 opacity-0"}`}></div>
                 <div className="w-full h-fit p-10 flex flex-col space-y-5">
                     <div className="w-full h-fit flex flex-col sm:flex-row md:space-x-10 p-5 justify-center items-center md:justify-start md:items-center pb-15">
                         <div onClick={() => { inputRef.current.click() }} onChange={(e) => { setFile(e.target.files[0]) }} className="relative shrink-0 w-64 h-64 group cursor-pointer">

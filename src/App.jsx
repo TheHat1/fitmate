@@ -5,6 +5,7 @@ import Home from "./Pages/Home"
 import ProfilePage from "./Pages/ProfilePage"
 import ProfileForm from "./Components/ProfileForm"
 import MapPage from "./Pages/MapPage"
+import RouteCheck from "./Components/RouteCheck"
 
 function App() {
   const [showForm, setShowForm] = useState([false, false])
