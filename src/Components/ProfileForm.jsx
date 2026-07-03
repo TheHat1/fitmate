@@ -76,6 +76,10 @@ export default function Form({ open, isSignup, setShowForm }) {
                 password: password
             })
 
+            if(error){
+                alert(error)
+            }
+
             setShowForm([false, false])
             navigate('/profile')
 
