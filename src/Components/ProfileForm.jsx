@@ -77,7 +77,9 @@ export default function Form({ open, isSignup, setShowForm }) {
             })
 
             if(error){
-                alert(error)
+                alert(error.message)
+                setShowForm([false, false])
+                return
             }
 
             setShowForm([false, false])
@@ -104,8 +106,9 @@ export default function Form({ open, isSignup, setShowForm }) {
                 }
             })
 
-            if (error) {
-
+            if(error){
+                alert(error.message)
+                setShowForm([false, false])
                 return
             }
 
