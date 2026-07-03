@@ -52,8 +52,9 @@ export default function ActivitieCard({ type, name, desc, by, exp_date }) {
     return (
         <>
             <div className="w-full min-h-25 h-fit p-2.5 bg-stone-700 rounded-lg flex flex-col sm:flex-row space-x-2 justify-between items-center pr-5">
-                <div className="w-full flex">
+                <div className="w-full flex items-center space-x-1">
                     <img className="h-20" src={image_path} />
+                    <h1 className="text-white unbounded">От: {by}</h1>
                     <div className="flex flex-col text-white unbounded p-2.5 text-xl">
                         <h1>{name}</h1>
                         <p className="font-extralight text-sm break-after-all">{desc}</p>
