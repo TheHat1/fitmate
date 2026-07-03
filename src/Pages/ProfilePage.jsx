@@ -99,7 +99,7 @@ export default function ProfilePage() {
         <>
             <section className="w-screen h-[calc(100vh-92px)] bg-black">
                 <div className="w-full h-fit p-10 flex flex-col space-y-5">
-                    <div className="w-full h-fit flex flex-col sm:flex-row space-x-10 p-5 justify-center md:justify-start md:items-center pb-15">
+                    <div className="w-full h-fit flex flex-col sm:flex-row md:space-x-10 p-5 justify-center items-center md:justify-start md:items-center pb-15">
                         <div onClick={() => { inputRef.current.click() }} onChange={(e) => { setFile(e.target.files[0]) }} className="relative shrink-0 w-64 h-64 group cursor-pointer">
                             <img className="w-64 h-64 bg-stone-300 p-1 rounded-full border-3 border-stone-500" src={pfp} />
                             <img className="w-11 z-10 absolute left-27.5 top-27.5 invert opacity-0 group-hover:opacity-100 transition-all duration-150" src="/Icons/edit.png" />
