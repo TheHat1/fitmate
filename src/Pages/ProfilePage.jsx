@@ -14,7 +14,6 @@ export default function ProfilePage() {
     const [file, setFile] = useState(null)
     const inputRef = useRef()
     const navigate = useNavigate()
-    const [filterPostByMe, setFilterPostsByMe] = useState(true)
     const [activities, setActivities] = useState()
     const [activities_json, setActivities_json] = useState([])
     const [filterBy, setFilterBy] = useState([""])
@@ -29,7 +28,7 @@ export default function ProfilePage() {
             const { data, error } = await supabase.auth.getUser()
             setUsername(data?.user?.user_metadata.full_name)
             setEmail(data?.user?.user_metadata.email)
-            setUserid(data?.user?.user_metadata.id)
+            setUserid(data?.user?.id)
             let url = await fetchUserPFP()
             setPfp(url)
         } catch (err) {
@@ -44,7 +43,9 @@ export default function ProfilePage() {
 
     async function GetActivities() {
         try {
-            const { data, error } = await supabase.from('activities').select('*').order("exp_date", { ascending: false });
+
+            const { data: user1 } = await supabase.auth.getUser()
+            const { data, error } = await supabase.from('activities').select('*').eq("by_user_id", user1.user.id).order("exp_date", { ascending: false })
 
             if (error) {
                 alert(error.message)
@@ -72,18 +73,14 @@ export default function ProfilePage() {
     }, [file])
 
     function displayActivitieCards() {
-        let filtered_json
 
-        if (filterPostByMe) {
-            filtered_json = activities_json.filter((e) => e.by_user_id == userid)
-        } else {
-            filtered_json = activities_json
-        }
+        let filtered_json = activities_json
+
         if (filterBy.length > 1) {
             filtered_json = filtered_json.filter((e) => filterBy.includes(e.type))
         }
 
-        if (filtered_json.length == 0) {
+        if (filtered_json.length === 0) {
             setActivities(
                 <div className=" text-gray-400 unbounded w-full text-center">Няма дейности</div>
             )
@@ -102,9 +99,29 @@ export default function ProfilePage() {
         GetActivities()
     }, [])
 
-    useEffect(() => {
+useEffect(() => {
+    if (activities_json !== undefined && activities_json !== null) {
         displayActivitieCards()
-    }, [filterPostByMe, filterBy])
+        return
+    }
+
+    let elapsed = 0
+
+    const interval = setInterval(() => {
+        elapsed += 100
+
+        if (activities_json !== undefined && activities_json !== null) {
+            clearInterval(interval)
+            displayActivitieCards()
+        }
+
+        if (elapsed >= 1000) {
+            clearInterval(interval)
+        }
+    }, 100)
+
+    return () => clearInterval(interval)
+}, [activities_json, filterBy])
 
     return (
         <>
@@ -113,7 +130,7 @@ export default function ProfilePage() {
                 <div className="w-full h-fit p-10 flex flex-col space-y-5">
                     <div className="w-full h-fit flex flex-col sm:flex-row md:space-x-10 p-5 justify-center items-center md:justify-start md:items-center pb-15">
                         <div onClick={() => { inputRef.current.click() }} onChange={(e) => { setFile(e.target.files[0]) }} className="relative shrink-0 w-64 h-64 group cursor-pointer">
-                            <img className="w-64 h-64 bg-stone-300 p-1 rounded-full border-3 border-stone-500" src={pfp} />
+                            <img className="w-64 h-64 bg-stone-300 p-1 rounded-full border-3 border-amber-600" src={pfp} />
                             <img className="w-11 z-10 absolute left-27.5 top-27.5 invert opacity-0 group-hover:opacity-100 transition-all duration-150" src="/Icons/edit.png" />
                             <div className="w-64 h-64 rounded-full opacity-0 group-hover:opacity-100 backdrop-blur-xs absolute top-0 left-0 transition-all duration-150">
                                 <input ref={inputRef} type="file" className="absolute hidden" />
@@ -126,13 +143,9 @@ export default function ProfilePage() {
                         </div>
                     </div>
                     <div className="w-full h-fit flex flex-col sm:flex-row p-2 justify-center md:justify-start md:items-center border-b border-stone-600 unbounded text-white space-x-5 text-2xl">
-                        Постове
+                        Мойте постове
                     </div>
                     <div className="w-full h-fit min-h-15 p-2 text-white unbounded flex flex-col lg:flex-row space-x-5 space-y-3 items-center">
-                        <button onClick={() => { setFilterPostsByMe(!filterPostByMe) }} className={`max-w-70 w-full rounded-lg p-1 px-3 transition-all duration-200 hover:-translate-y-0.75 cursor-pointer
-                            ${filterPostByMe ? "hover:bg-emerald-500 bg-emerald-600 " : "hover:bg-sky-600 bg-sky-700 "}`}>
-                            {filterPostByMe ? "От мен" : "От други"}
-                        </button>
                         <h1 className="shrink-0">Филтрирай по: </h1>
                         <FilterSelector setFilterBy={setFilterBy} />
                     </div>

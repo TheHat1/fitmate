@@ -3,6 +3,10 @@
 
 *{
     @apply select-none;
+    
+}
+
+:root{
     overflow-x: hidden;
 }
 
