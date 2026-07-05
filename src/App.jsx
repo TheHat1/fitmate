@@ -40,7 +40,14 @@ function App() {
       <ProfileForm open={showForm[0]} isSignup={showForm[1]} setShowForm={setShowForm} />
 
       <div className='w-full h-23 bg-stone-700 border-b-8 border-amber-600 shadow-2xl flex justify-between p-2.5 items-center'>
-        <img />
+        <div onClick={()=>{navigate('/')}} className="flex items-center group cursor-pointer">
+          <img className="h-20 -mr-2 group-hover:brightness-125 group-hover:translate-x-1 transition-all duration-150" src="fitmate_logo.png"/>
+          <div className="unbounded text-xl flex flex-col -space-y-2 group-hover:translate-x-1 transition-all duration-150">
+            <h1 className="text-white group-hover:brightness-75 transition-all duration-150">FIT</h1>
+            <h1 className="text-amber-600 group-hover:text-amber-500 transition-all duration-150">MATE</h1>
+          </div>
+        </div>
+        
         <div className="h-full flex items-center pr-3 space-x-4 text-white unbounded font-light text-md">
           <button onClick={()=>{navigate('/map')}} className="hover:opacity-50 cursor-pointer transition-opacity duration-150 hover:border-b border-amber-700">Карта</button>
           {isLoggedIn ? 

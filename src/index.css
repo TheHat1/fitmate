@@ -26,11 +26,3 @@
     background-color: rgb(150,150,150);
     border-radius: 4px;
 }
-
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-color: black;
-  outline-style: none;
-}

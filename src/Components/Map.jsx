@@ -1,8 +1,41 @@
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
+import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet"
 import BoundsJSON from "../Assets/mapBoundCords.json"
+import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { DivIcon } from "leaflet"
 
-export default function Map() {
+export default function Map({setActivityCords, isAddActivity}) {
+    const [addActivityHereMarkerCords, setAddActivityHereMarkerCords] = useState()
     const bounds = L.geoJSON(BoundsJSON).getBounds()
+    const navigate = useNavigate()
+
+    const addActivityHereMarkerIcon = new DivIcon({
+        iconSize: [35, 35],
+        className: "group",
+        html: `
+        <div class="relative">
+          <img src="/Icons/add_activity_map_icon.png" 
+            class="w-9 h-9" />
+        </div>
+      `,
+    })
+
+    useEffect(()=>{
+        if(!isAddActivity){
+            setAddActivityHereMarkerCords(undefined)
+        }
+    },[isAddActivity])
+
+    function MapEvents() {
+        useMapEvents({
+            click(e) {
+                if(isAddActivity){
+                    setAddActivityHereMarkerCords(e.latlng)
+                    setActivityCords(e.latlng)
+                }
+            }
+        })
+    }
 
     return (
         <MapContainer
@@ -11,17 +44,20 @@ export default function Map() {
             scrollWheelZoom={false}
             className="w-full h-full rounded-lg"
             maxBounds={bounds}
+
             minZoom={13}
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={[43.2101919675957, 23.55252260142366]}>
-                <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-            </Marker>
+            {addActivityHereMarkerCords === undefined ? null :
+                <Marker position={addActivityHereMarkerCords} icon={addActivityHereMarkerIcon}>
+
+                </Marker>
+            }
+
+            <MapEvents />
         </MapContainer>
     )
 }

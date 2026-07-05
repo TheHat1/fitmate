@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import supabase from "../Backend/supabase"
 import { useNavigate } from "react-router-dom"
 import ActivitieCard from "../Components/ActivitieCard"
-import FilterSelector from "../Components/FilterSelector"
+import FilterSelector from "../Components/FilterSelectorType"
 import fetchUserPFP from "../Backend/fetchUserPFP"
 import uploadUserPFP from "../Backend/uploadUserPFP"
 

@@ -47,7 +47,6 @@ export default function FilterSelector({ setFilterBy }) {
                 }
             } break
             default: {
-                (true)
                 setFootballToggle(false)
                 setBasketballToggle(false)
                 setMiscToggle(false)
