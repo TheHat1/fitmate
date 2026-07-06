@@ -3,9 +3,11 @@ import BoundsJSON from "../Assets/mapBoundCords.json"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { DivIcon } from "leaflet"
+import supabase from "../Backend/supabase"
 
-export default function Map({setActivityCords, isAddActivity}) {
+export default function Map({ setActivityCords, isAddActivity }) {
     const [addActivityHereMarkerCords, setAddActivityHereMarkerCords] = useState()
+    const [activityMarkerCords, setActivityMarkerCords] = useState()
     const bounds = L.geoJSON(BoundsJSON).getBounds()
     const navigate = useNavigate()
 
@@ -14,22 +16,52 @@ export default function Map({setActivityCords, isAddActivity}) {
         className: "group",
         html: `
         <div class="relative">
-          <img src="/Icons/add_activity_map_icon.png" 
+          <img src="/Icons/map_pin.png" 
             class="w-9 h-9" />
         </div>
       `,
     })
 
-    useEffect(()=>{
-        if(!isAddActivity){
+    async function getActivities(){
+        try{
+            const {data, error} = await supabase.from("activities").select("*")//.gte("created_at", new Date().setHours(0, 0, 0, 0))
+
+            if(error){
+                console.error(error.message)
+                return
+            }
+            setActivityCords(data)
+
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+    useEffect(() => {
+        if (!isAddActivity) {
             setAddActivityHereMarkerCords(undefined)
         }
-    },[isAddActivity])
+    }, [isAddActivity])
+
+    useEffect(() => {
+        getActivities()
+        const channel = supabase.channel("activities-update").
+        on("postgres_changes",{
+            event: "*",
+            schema: "public",
+            table: "activities"
+        },
+        (payload)=>{
+            console.log("Table changed")
+            console.log(payload)
+        }
+    )
+    }, [])
 
     function MapEvents() {
         useMapEvents({
             click(e) {
-                if(isAddActivity){
+                if (isAddActivity) {
                     setAddActivityHereMarkerCords(e.latlng)
                     setActivityCords(e.latlng)
                 }
@@ -55,6 +87,17 @@ export default function Map({setActivityCords, isAddActivity}) {
                 <Marker position={addActivityHereMarkerCords} icon={addActivityHereMarkerIcon}>
 
                 </Marker>
+            }
+            {
+                !isAddActivity && activityMarkerCords != undefined ? 
+                activityMarkerCords.map((e)=>{
+                    console.log(e);
+                    <Marker position={e.position} icon={addActivityHereMarkerIcon}>
+
+                    </Marker>
+                })
+                :
+                null
             }
 
             <MapEvents />

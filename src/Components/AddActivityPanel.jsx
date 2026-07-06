@@ -40,7 +40,6 @@ export default function AddActivityPanel({ show, scrollMapIntoView, locationCord
                 setInProgress(false)
                 return
             }
-            console.log(type)
 
             const { data: user } = await supabase.auth.getUser()
             const user_id = user.user.id
