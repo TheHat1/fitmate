@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import supabase from "../Backend/supabase"
 import { useNavigate } from "react-router-dom"
-import ActivitieCard from "../Components/ActivitieCard"
+import ActivityCard from "../Components/ActivitieCard"
 import FilterSelector from "../Components/FilterSelectorType"
 import fetchUserPFP from "../Backend/fetchUserPFP"
 import uploadUserPFP from "../Backend/uploadUserPFP"
@@ -14,7 +14,7 @@ export default function ProfilePage() {
     const [file, setFile] = useState(null)
     const inputRef = useRef()
     const navigate = useNavigate()
-    const [activities, setActivities] = useState()
+    const [activitiesInfo, setActivitiesInfo] = useState()
     const [activities_json, setActivities_json] = useState([])
     const [filterBy, setFilterBy] = useState([""])
     const [loading, setLoading] = useState(false)
@@ -77,21 +77,15 @@ export default function ProfilePage() {
         let filtered_json = activities_json
 
         if (filterBy.length > 1) {
-            filtered_json = filtered_json.filter((e) => filterBy.includes(e.type))
+            filtered_json = filtered_json.filter((e) => e.type.includes(filterBy))
         }
 
         if (filtered_json.length === 0) {
-            setActivities(
-                <div className=" text-gray-400 unbounded w-full text-center">Няма дейности</div>
-            )
+            setActivitiesInfo()
             return
         }
 
-        setActivities(filtered_json.map(
-            (e) => {
-                return <ActivitieCard key={e.id} type={e.type} name={e.name} desc={e.desc} by={e.by} exp_date={e.exp_date} />
-            }
-        ))
+        setActivitiesInfo(filtered_json)
     }
 
     useEffect(() => {
@@ -99,34 +93,34 @@ export default function ProfilePage() {
         GetActivities()
     }, [])
 
-useEffect(() => {
-    if (activities_json !== undefined && activities_json !== null) {
-        displayActivitieCards()
-        return
-    }
-
-    let elapsed = 0
-
-    const interval = setInterval(() => {
-        elapsed += 100
-
+    useEffect(() => {
         if (activities_json !== undefined && activities_json !== null) {
-            clearInterval(interval)
             displayActivitieCards()
+            return
         }
 
-        if (elapsed >= 1000) {
-            clearInterval(interval)
-        }
-    }, 100)
+        let elapsed = 0
 
-    return () => clearInterval(interval)
-}, [activities_json, filterBy])
+        const interval = setInterval(() => {
+            elapsed += 100
+
+            if (activities_json !== undefined && activities_json !== null) {
+                clearInterval(interval)
+                displayActivitieCards()
+            }
+
+            if (elapsed >= 1000) {
+                clearInterval(interval)
+            }
+        }, 100)
+
+        return () => clearInterval(interval)
+    }, [activities_json, filterBy])
 
     return (
         <>
-            <section className="w-screen h-[calc(100vh-92px)] bg-black">
-                <div className={`fixed top-0 w-full h-full backdrop-blur-sm bg-black/70 transition-all duration-300 ${loading ? "z-50 opacity-100":"-z-50 opacity-0"}`}></div>
+            <section className="w-screen h-fit min-h-[calc(100vh-92px)] bg-black">
+                <div className={`fixed top-0 w-full h-full backdrop-blur-sm bg-black/70 transition-all duration-300 ${loading ? "z-50 opacity-100" : "-z-50 opacity-0"}`}></div>
                 <div className="w-full h-fit p-10 flex flex-col space-y-5">
                     <div className="w-full h-fit flex flex-col sm:flex-row md:space-x-10 p-5 justify-center items-center md:justify-start md:items-center pb-15">
                         <div onClick={() => { inputRef.current.click() }} onChange={(e) => { setFile(e.target.files[0]) }} className="relative shrink-0 w-64 h-64 group cursor-pointer">
@@ -149,8 +143,14 @@ useEffect(() => {
                         <h1 className="shrink-0">Филтрирай по: </h1>
                         <FilterSelector setFilterBy={setFilterBy} />
                     </div>
-                    <div className="w-full h-full flex flex-col">
-                        {activities}
+                    <div className="w-full h-full flex flex-col space-y-2">
+                        {activitiesInfo? activitiesInfo.map((e) => {
+                            return (
+                                <ActivityCard key={e.id} type={e.type} name={e.title} desc={e.desc} by={e.by} exp_date={e.exp_date} id={e.id} />
+                            )
+                        }) 
+                        : 
+                        (<div className=" text-gray-400 unbounded w-full text-center">Няма дейности</div>)}
                     </div>
                 </div>
             </section>

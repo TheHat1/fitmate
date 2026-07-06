@@ -25,7 +25,9 @@ export default function Map({ setActivityCords, isAddActivity }) {
 
     async function getActivities() {
         try {
-            const { data, error } = await supabase.from("activities").select("position, id, title")//.gte("created_at", new Date().setHours(0, 0, 0, 0))
+            const today = new Date()
+            today.setHours(0)
+            const { data, error } = await supabase.from("activities").select("position, id, title").gte("created_at", today.toISOString())
 
             if (error) {
                 console.error(error.message)
