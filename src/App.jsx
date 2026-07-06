@@ -68,6 +68,7 @@ function App() {
           <Route path="/#" element={<Home />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/map" element={<MapPage />} />
+          <Route path="/map/:activity_id" element={<MapPage />} />
         </Routes>
 
         <footer className="w-screen h-fit bg-stone-700 border-amber-600 border-t-8 shadow-2xl p-8 flex justify-between items-center text-white unbounded">
