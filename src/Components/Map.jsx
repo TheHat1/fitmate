@@ -25,7 +25,7 @@ export default function Map({ setActivityCords, isAddActivity }) {
 
     async function getActivities() {
         try {
-            const { data, error } = await supabase.from("activities").select("*")//.gte("created_at", new Date().setHours(0, 0, 0, 0))
+            const { data, error } = await supabase.from("activities").select("position, id, title")//.gte("created_at", new Date().setHours(0, 0, 0, 0))
 
             if (error) {
                 console.error(error.message)
@@ -53,10 +53,13 @@ export default function Map({ setActivityCords, isAddActivity }) {
                 table: "activities"
             },
                 (payload) => {
-                    console.log("Table changed")
-                    console.log(payload)
+                    getActivities()
                 }
-            )
+            ).subscribe()
+
+        return () => {
+            supabase.removeChannel(channel)
+        }
     }, [])
 
     function MapEvents() {
@@ -121,7 +124,7 @@ export default function Map({ setActivityCords, isAddActivity }) {
                     !isAddActivity ?
                         activityMarkerCords?.map((e) => {
                             return (
-                                <Marker eventHandlers={{click:()=>{navigate("/map/"+e.id)}}} key={e.id} position={e.position.map(Number)} icon={addActivityHereMarkerIcon}>
+                                <Marker eventHandlers={{ click: () => { navigate("/map/" + e.id) } }} key={e.id} position={e.position.map(Number)} icon={addActivityHereMarkerIcon}>
                                     <Tooltip direction="top">{e.title}</Tooltip>
                                 </Marker>
                             )

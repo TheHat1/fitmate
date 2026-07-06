@@ -4,6 +4,8 @@ import FilterSelectorTime from "../Components/FilterSelectorTime"
 import AddActivityPanel from "../Components/AddActivityPanel"
 import SetNumberOfPeople from "../Components/SetNumberOfPeople"
 import { useState, useRef, useEffect } from "react"
+import { useParams } from "react-router-dom"
+import supabase from "../Backend/supabase"
 
 export default function ProfilePage() {
     const [filterBy, setFilterBy] = useState([""])
@@ -12,12 +14,29 @@ export default function ProfilePage() {
     const [showAddActivityPanel, setShowAddActivityPanel] = useState(false)
     const [addActivityHereCords, setAddActivityHereCords] = useState()
     const [numberOfPeopleRemaining ,setNumberOfPeopleRemaining] = useState(-1)
+    const [activitiesInfo, setActivitiesInfo] = useState()
 
     const mapContainerRef = useRef()
     const panelRef = useRef()
+    const {activity_id} = useParams()
 
     function scrollMap() {
         mapContainerRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+
+        async function getActivities() {
+        try {
+            const { data, error } = await supabase.from("activities").select("*")//.gte("created_at", new Date().setHours(0, 0, 0, 0))
+
+            if (error) {
+                console.error(error.message)
+                return
+            }
+            setActivitiesInfo(data)
+
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     useEffect(() => {
@@ -55,7 +74,7 @@ export default function ProfilePage() {
                     <Map setActivityCords={setAddActivityHereCords} isAddActivity={showAddActivityPanel} />
                 </div>
             </section>
-            <section className="w-screen h-fit min-h-screen flex justify-start items-start space-y-2 p-10 pt-0 bg-black flex-col">
+            <section className="w-screen h-fit flex justify-start items-start space-y-2 p-10 pt-0 bg-black flex-col">
                 <div className="text-white unbounded flex flex-col sm:flex-row sm:space-x-2 space-y-1 w-full items-center">
                     <h1 className="shrink-0 text-xl">Добавяне на активност:</h1>
                     <button onClick={() => { setShowAddActivityPanel(!showAddActivityPanel) }}
@@ -65,6 +84,9 @@ export default function ProfilePage() {
                     </button>
                 </div>
                 <AddActivityPanel ref={panelRef} show={showAddActivityPanel} locationCords={addActivityHereCords} scrollMapIntoView={scrollMap} setShow={setShowAddActivityPanel}/>
+            </section>
+            <section className="w-full h-fit flex flex-col space-y-2">
+                {}
             </section>
         </>
     )
