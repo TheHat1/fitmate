@@ -7,7 +7,7 @@ export default function AddActivityPanel({ show, scrollMapIntoView, locationCord
     const [numberOfPeople, setNumberOfPeople] = useState(-1)
     const [title, setTitle] = useState("")
     const [desc, setDesc] = useState("")
-    const [type, setType] = useState([""])
+    let [type, setType] = useState([""])
     const [expDate, setExpDate] = useState()
     const [isError, setIsError] = useState(false)
     const [errorMsg, setErrorMsg] = useState("")
@@ -27,10 +27,6 @@ export default function AddActivityPanel({ show, scrollMapIntoView, locationCord
                 return
             }
 
-            if (type === [""]) {
-                setType(["misc"])
-            }
-
             if (locationCords === undefined) {
                 setIsError(true)
                 setErrorMsg("Не е избрана локация")
@@ -44,6 +40,7 @@ export default function AddActivityPanel({ show, scrollMapIntoView, locationCord
                 setInProgress(false)
                 return
             }
+            console.log(type)
 
             const { data: user } = await supabase.auth.getUser()
             const user_id = user.user.id

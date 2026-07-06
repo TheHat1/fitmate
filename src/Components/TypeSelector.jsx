@@ -37,14 +37,36 @@ export default function FilterSelector({ setType }) {
         }
     }
 
+    function setFilter() {
+        let filters = []
+        if (!footbalToggle && !basketballToggle && !miscToggle) {
+            setType(["misc"])
+            return
+        }
+        if (footbalToggle) {
+            filters.push("football")
+        }
+        if (basketballToggle) {
+            filters.push("basketball")
+        }
+        if (miscToggle) {
+            filters.push("misc")
+        }
+        setType(filters)
+    }
+
+    useEffect(()=>{
+        setFilter()
+    },[footbalToggle, basketballToggle, miscToggle])
+
     return (
         <>
             <div className="w-full flex flex-wrap h-fit min-h-10 items-center justify-start">
-                <button onClick={()=>{handleFilterToggle("football")}} className={` text-white h-6 unbounded w-29 md:w-40 rounded-lg cursor-pointer  transition-all duration-150 hover:-translate-y-1 m-1
+                <button onClick={() => { handleFilterToggle("football") }} className={` text-white h-6 unbounded w-29 md:w-40 rounded-lg cursor-pointer  transition-all duration-150 hover:-translate-y-1 m-1
                     ${footbalToggle ? "bg-amber-600 hover:bg-amber-500" : "bg-gray-600 hover:bg-gray-500"}`}>Футбол</button>
-                <button onClick={()=>{handleFilterToggle("basketball")}} className={` text-white h-6 unbounded w-29 md:w-40 rounded-lg cursor-pointer  transition-all duration-150 hover:-translate-y-1 m-1
+                <button onClick={() => { handleFilterToggle("basketball") }} className={` text-white h-6 unbounded w-29 md:w-40 rounded-lg cursor-pointer  transition-all duration-150 hover:-translate-y-1 m-1
                     ${basketballToggle ? "bg-amber-600 hover:bg-amber-500" : "bg-gray-600 hover:bg-gray-500"}`}>Баскетбол</button>
-                <button onClick={()=>{handleFilterToggle("misc")}} className={` text-white h-6 unbounded w-29 md:w-40 rounded-lg cursor-pointer  transition-all duration-150 hover:-translate-y-1 m-1
+                <button onClick={() => { handleFilterToggle("misc") }} className={` text-white h-6 unbounded w-29 md:w-40 rounded-lg cursor-pointer  transition-all duration-150 hover:-translate-y-1 m-1
                     ${miscToggle ? "bg-amber-600 hover:bg-amber-500" : "bg-gray-600 hover:bg-gray-500"}`}>Други</button>
             </div>
         </>
