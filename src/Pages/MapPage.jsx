@@ -7,6 +7,7 @@ import { useState, useRef, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import supabase from "../Backend/supabase"
 import ActivityCard from "../Components/ActivitieCard"
+import ViewActivitySidePanel from "../Components/ViewActivitySidePanel"
 
 export default function ProfilePage({ isLoggedIn, showForm }) {
     const [filterBy, setFilterBy] = useState([""])
@@ -16,6 +17,7 @@ export default function ProfilePage({ isLoggedIn, showForm }) {
     const [addActivityHereCords, setAddActivityHereCords] = useState()
     const [numberOfPeopleRemaining, setNumberOfPeopleRemaining] = useState(-1)
     const [activitiesInfo, setActivitiesInfo] = useState()
+    const [openSideMenu, setOpenSideMenu] = useState(false)
 
     const mapContainerRef = useRef()
     const panelRef = useRef()
@@ -54,10 +56,21 @@ export default function ProfilePage({ isLoggedIn, showForm }) {
 
     useEffect(() => {
         getActivities()
-    })
+    },[])
+
+    useEffect(()=>{
+        if(activity_id === undefined) {
+            setOpenSideMenu(false)
+            return
+        }
+
+        setOpenSideMenu(true)
+
+    },[activity_id])
 
     return (
         <>
+            <ViewActivitySidePanel open={openSideMenu} close={setOpenSideMenu} id={activity_id}/>
             <section className="w-screen h-fit min-h-[calc(100vh-92px)] flex justify-start items-start space-y-2 p-7 sm:p-10 bg-black flex-col">
                 <h1 className="text-white unbounded text-3xl border-b border-amber-600 w-full">Активности</h1>
                 <div className="w-full h-fit min-h-15 p-2 text-white unbounded flex flex-col lg:flex-row lg:space-x-5 space-y-3 items-center">
