@@ -75,7 +75,7 @@ export default function FilterSelector({ setFilterBy }) {
                 <button onClick={() => { handleFilterToggle(3) }} className={` text-white h-7 unbounded w-60 rounded-lg cursor-pointer  transition-all duration-150 hover:-translate-y-1 m-1
                     ${twoHourToggle ? "bg-amber-600 hover:bg-amber-500" : "bg-gray-600 hover:bg-gray-500"}`}>2 часа</button>
                 <button onClick={() => { handleFilterToggle(0) }} className={` text-white h-7 unbounded w-60 rounded-lg cursor-pointer  transition-all duration-150 hover:-translate-y-1 m-1
-                    ${noFilterToggle ? "bg-amber-600 hover:bg-amber-500" : "bg-gray-600 hover:bg-gray-500"}`}>{"> 2 часа"}</button>
+                    ${noFilterToggle ? "bg-amber-600 hover:bg-amber-500" : "bg-gray-600 hover:bg-gray-500"}`}>Всички</button>
             </div>
         </>
     )

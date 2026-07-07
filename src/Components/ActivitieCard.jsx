@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import types from "../Assets/types.json"
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function ActivitieCard({ type, name, desc, by, exp_date, id }) {
     const [remaining, setRemaining] = useState("")
     const [icons, setIcons] = useState()
+    const address = useLocation()
+    const navigate = useNavigate()
 
     function handleIcons() {
 
@@ -67,7 +70,9 @@ export default function ActivitieCard({ type, name, desc, by, exp_date, id }) {
 
     return (
         <>
-            <div className="w-full min-h-18 h-fit p-2.5 cursor-pointer hover:translate-x-1 transition-all duration-150 hover:bg-linear-to-r from-amber-600 to-black border-b border-l-8 rounded-bl-md border-l-amber-600 border-b-white flex flex-col sm:flex-row space-x-2 justify-between items-center pr-5">
+            <div onClick={()=>{
+                address.pathname === "/map" ? navigate('/map/' + id) : null
+            }} className="w-full min-h-18 h-fit p-2.5 cursor-pointer hover:translate-x-1 transition-all duration-150 hover:bg-linear-to-r from-amber-600 to-black border-b border-l-8 rounded-bl-md border-l-amber-600 border-b-white flex flex-col sm:flex-row space-x-2 justify-between items-center pr-5">
                 <div className="w-full min-h-18 flex items-center space-x-1 relative">
                     {icons}
                     <div className="flex flex-col text-white unbounded p-2.5 pl-17 text-xl">

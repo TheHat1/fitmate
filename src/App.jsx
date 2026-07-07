@@ -11,6 +11,7 @@ function App() {
   const [showForm, setShowForm] = useState([false, false])
   //[boolean for opening the form, boolean for determining the forms type (login/signup)]
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userid, setUserid] = useState()
   const address = useLocation()
   const navigate = useNavigate()
 
@@ -26,8 +27,13 @@ function App() {
 
     if (data.session == null) {
       setIsLoggedIn(false)
+      return
     }
     else setIsLoggedIn(true)
+
+    const {data: user} = await supabase.auth.getUser()
+
+    setUserid(user.user.id)
   }
 
   useEffect(() => {
@@ -70,8 +76,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/#" element={<Home />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/map" element={<MapPage isLoggedIn={isLoggedIn} showForm={setShowForm} />} />
-          <Route path="/map/:activity_id" element={<MapPage isLoggedIn={isLoggedIn} showForm={setShowForm} />} />
+          <Route path="/map" element={<MapPage isLoggedIn={isLoggedIn} showForm={setShowForm} userId={userid}/>} />
+          <Route path="/map/:activity_id" element={<MapPage isLoggedIn={isLoggedIn} showForm={setShowForm} userId={userid}/>} />
         </Routes>
 
         <footer className="w-screen h-fit bg-stone-700 border-amber-600 border-t-8 shadow-2xl p-8 flex justify-between items-center text-white unbounded">

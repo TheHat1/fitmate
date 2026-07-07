@@ -5,9 +5,8 @@ import { useEffect, useState } from "react"
 import { DivIcon } from "leaflet"
 import supabase from "../Backend/supabase"
 
-export default function Map({ setActivityCords, isAddActivity }) {
+export default function Map({ setActivityCords, isAddActivity, activityMarkerCords }) {
     const [addActivityHereMarkerCords, setAddActivityHereMarkerCords] = useState()
-    const [activityMarkerCords, setActivityMarkerCords] = useState([])
     const [showSugestion, setShowSugestion] = useState(false)
     const bounds = L.geoJSON(BoundsJSON).getBounds()
     const navigate = useNavigate()
@@ -23,46 +22,11 @@ export default function Map({ setActivityCords, isAddActivity }) {
       `,
     })
 
-    async function getActivities() {
-        try {
-            const today = new Date()
-            today.setHours(0)
-            const { data, error } = await supabase.from("activities").select("position, id, title").gte("created_at", today.toISOString())
-
-            if (error) {
-                console.error(error.message)
-                return
-            }
-            setActivityMarkerCords(data)
-
-        } catch (err) {
-            console.error(err)
-        }
-    }
-
     useEffect(() => {
         if (!isAddActivity) {
             setAddActivityHereMarkerCords(undefined)
         }
     }, [isAddActivity])
-
-    useEffect(() => {
-        getActivities()
-        const channel = supabase.channel("activities-update").
-            on("postgres_changes", {
-                event: "*",
-                schema: "public",
-                table: "activities"
-            },
-                (payload) => {
-                    getActivities()
-                }
-            ).subscribe()
-
-        return () => {
-            supabase.removeChannel(channel)
-        }
-    }, [])
 
     function MapEvents() {
         const map = useMapEvents({

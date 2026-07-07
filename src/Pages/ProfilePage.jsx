@@ -77,7 +77,7 @@ export default function ProfilePage() {
         let filtered_json = activities_json
 
         if (filterBy.length > 1) {
-            filtered_json = filtered_json.filter((e) => e.type.includes(filterBy))
+            filtered_json = filtered_json.filter((e) => e.type.some(type => filterBy.includes(type)))
         }
 
         if (filtered_json.length === 0) {
