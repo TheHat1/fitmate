@@ -11,7 +11,7 @@ export default function Home() {
                     FitMate
                 </h1>
                 <h2 className="text-white text-2xl unbounded">
-                    лозонг лозонг лозонг
+                    Спортувай заедно.
                 </h2>
                 <button onClick={() => {
                     aboutRef.current.scrollIntoView({
@@ -20,9 +20,13 @@ export default function Home() {
                 }}
                     className="w-25 h-10 unbounded text-white bg-amber-600 mt-5 rounded-2xl treansition-all duration-200 hover:-translate-y-1 hover:bg-amber-500 cursor-pointer hover:scale-110">За нас</button>
             </section>
-            <section ref={aboutRef} className="w-screen h-fit min-h-1/2 text-3xl p-15 unbounded flex flex-col justify-baseline">
+            <section ref={aboutRef} className="w-screen h-fit min-h-1/2 text-3xl p-15 unbounded flex flex-col justify-baseline bg-stone-100">
                 <h1 className="overflow-x-hidden h-fit min-h-15 mb-3">Какво е <a className="text-amber-600 overflow-hidden font-bold">FitMate</a>?</h1>
-                <p className="text-xl font-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum harum aperiam obcaecati quibusdam voluptatum neque, dolores blanditiis quas tenetur, nesciunt consectetur? Impedit iure sed itaque. Laborum labore modi nihil? Nemo.</p>
+                <div className="flex flex-col space-y-3 indent-10">
+                    <p className="text-xl font-light ">FitMate е мястото, където спортът среща хората. Създадохме платформата, за да направим намирането на съотборници и организирането на спортни активности бързо, лесно и достъпно.</p>
+                    <p className="text-xl font-light">Липсва ви още един човек за футбол? Търсите компания за баскетбол, волейбол, тенис или бягане? Публикувайте активност с няколко клика, посочете мястото, часа и колко участници са ви нужни, а останалото оставете на общността.</p>
+                    <p className="text-xl font-light">FitMate помага да прекарвате по-малко време в търсене на хора и повече време в игра. Независимо дали организирате редовни тренировки или спонтанен мач след работа или училище, тук винаги можете да откриете хора със същата енергия и желание за движение.</p>
+                </div>
             </section>
         </>
     )
