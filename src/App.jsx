@@ -17,22 +17,22 @@ function App() {
   useEffect(() => {
     checkUserStatus()
     if (address.pathname == "/#") {
-      setShowForm([true,false])
+      setShowForm([true, false])
     }
   }, [address])
 
-  async function checkUserStatus(){
-    const {data, error} = await supabase.auth.getSession()
+  async function checkUserStatus() {
+    const { data, error } = await supabase.auth.getSession()
 
-    if(data.session == null){
+    if (data.session == null) {
       setIsLoggedIn(false)
     }
     else setIsLoggedIn(true)
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     checkUserStatus()
-  },[showForm])
+  }, [showForm])
 
   return (
     <>
@@ -40,23 +40,26 @@ function App() {
       <ProfileForm open={showForm[0]} isSignup={showForm[1]} setShowForm={setShowForm} />
 
       <div className='w-full h-23 bg-stone-700 border-b-8 border-amber-600 shadow-2xl flex justify-between p-2.5 items-center'>
-        <div onClick={()=>{navigate('/')}} className="flex items-center group cursor-pointer">
-          <img className="h-20 -mr-2 group-hover:brightness-125 group-hover:translate-x-1 transition-all duration-150" src="fitmate_logo.png"/>
+        <div onClick={() => { navigate('/') }} className="flex items-center group cursor-pointer">
+          <img className="h-20 -mr-2 group-hover:brightness-125 group-hover:translate-x-1 transition-all duration-150" src="fitmate_logo.png" />
           <div className="unbounded text-xl flex flex-col -space-y-2 group-hover:translate-x-1 transition-all duration-150">
             <h1 className="text-white group-hover:brightness-75 transition-all duration-150">FIT</h1>
             <h1 className="text-amber-600 group-hover:text-amber-500 transition-all duration-150">MATE</h1>
           </div>
         </div>
-        
+
         <div className="h-full flex items-center pr-3 space-x-4 text-white unbounded font-light text-md">
-          <button onClick={()=>{navigate('/map')}} className="hover:opacity-50 cursor-pointer transition-opacity duration-150 hover:border-b border-amber-700">Карта</button>
-          {isLoggedIn ? 
-          <img onClick={()=>{navigate('/profile')}} className="h-8 transition-all hover:-translate-y-1 cursor-pointer invert" src="/Icons/user.png"/>
-          :
-          <>
-          <button onClick={() => { setShowForm([!showForm[0], false]) } } className="hover:opacity-50 cursor-pointer transition-opacity duration-150 hover:border-b border-amber-700">Вход</button>
-          <button onClick={() => { setShowForm([!showForm[0], true]) } } className="bg-amber-600 rounded-lg p-1 px-3 transition-all duration-200 hover:bg-amber-500 hover:-translate-y-0.75 cursor-pointer">Регистрация</button>
-          </>
+          <button onClick={() => { navigate('/map') }} className={`hover:opacity-50 cursor-pointer transition-opacity duration-150 hover:border-b border-amber-700
+            ${isLoggedIn ? "w-fit" : "w-0 opacity-0 pointer-events-none"}`}>Карта</button>
+          {isLoggedIn ?
+            <img onClick={() => { navigate('/profile') }} className="h-8 transition-all hover:-translate-y-1 cursor-pointer invert" src="/Icons/user.png" />
+            :
+            <>
+              <div className="flex flex-wrap items-end justify-end space-y-1 space-x-4">
+                <button onClick={() => { setShowForm([!showForm[0], false]) }} className="hover:opacity-50 cursor-pointer transition-opacity duration-150 hover:border-b border-amber-700">Вход</button>
+                <button onClick={() => { setShowForm([!showForm[0], true]) }} className="bg-amber-600 rounded-lg p-1 px-3 transition-all duration-200 hover:bg-amber-500 hover:-translate-y-0.75 cursor-pointer">Регистрация</button>
+              </div>
+            </>
           }
         </div>
       </div>
@@ -67,16 +70,16 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/#" element={<Home />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/map" element={<MapPage />} />
-          <Route path="/map/:activity_id" element={<MapPage />} />
+          <Route path="/map" element={<MapPage isLoggedIn={isLoggedIn} showForm={setShowForm} />} />
+          <Route path="/map/:activity_id" element={<MapPage isLoggedIn={isLoggedIn} showForm={setShowForm} />} />
         </Routes>
 
         <footer className="w-screen h-fit bg-stone-700 border-amber-600 border-t-8 shadow-2xl p-8 flex justify-between items-center text-white unbounded">
-          <div className="overflow-y-hidden flex flex-col font-extralight max-w-25 w-full ">
+          <div className="overflow-y-hidden flex flex-col font-extralight max-w-25 w-full overflow-x-hidden">
             <a className="font-normal border-b">Страници</a>
-            <a className="pl-3 transition-all duration-150 hover:brightness-50 hover:translate-x-2 cursor-pointer"  onClick={()=>{navigate('/')}}>Начало</a>
-            <a className="pl-3 transition-all duration-150 hover:brightness-50 hover:translate-x-2 cursor-pointer" onClick={()=>{isLoggedIn ? navigate('/profile'): setShowForm([true,false])}}>Профил</a>
-            <a className="pl-3 transition-all duration-150 hover:brightness-50 hover:translate-x-2 cursor-pointer" onClick={()=>{navigate('/map')}}>Карта</a>
+            <a className="pl-3 transition-all duration-150 hover:brightness-50 hover:translate-x-2 cursor-pointer" onClick={() => { navigate('/') }}>Начало</a>
+            <a className="pl-3 transition-all duration-150 hover:brightness-50 hover:translate-x-2 cursor-pointer" onClick={() => { isLoggedIn ? navigate('/profile') : setShowForm([true, false]) }}>Профил</a>
+            <a className="pl-3 transition-all duration-150 hover:brightness-50 hover:translate-x-2 cursor-pointer" onClick={() => { navigate('/map') }}>Карта</a>
           </div>
           <div className="overflow-hidden">
             ©FitMate

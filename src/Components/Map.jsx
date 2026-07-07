@@ -108,7 +108,7 @@ export default function Map({ setActivityCords, isAddActivity }) {
                 center={[43.2101919675957, 23.55252260142366]}
                 zoom={13}
                 scrollWheelZoom={false}
-                className="w-full h-full rounded-lg"
+                className="w-full h-full rounded-lg z-0"
                 maxBounds={bounds}
 
                 minZoom={13}

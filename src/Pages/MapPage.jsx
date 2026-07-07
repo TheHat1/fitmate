@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom"
 import supabase from "../Backend/supabase"
 import ActivityCard from "../Components/ActivitieCard"
 
-export default function ProfilePage() {
+export default function ProfilePage({ isLoggedIn, showForm }) {
     const [filterBy, setFilterBy] = useState([""])
     const [filterByTime, setFilterByTime] = useState(0)
     const [filterPostByMe, setFilterPostsByMe] = useState(true)
@@ -52,7 +52,7 @@ export default function ProfilePage() {
         }
     }, [showAddActivityPanel])
 
-    useEffect(()=>{
+    useEffect(() => {
         getActivities()
     })
 
@@ -90,11 +90,22 @@ export default function ProfilePage() {
                         {showAddActivityPanel ? "x" : "+"}
                     </button>
                 </div>
-                <AddActivityPanel ref={panelRef} show={showAddActivityPanel} locationCords={addActivityHereCords} scrollMapIntoView={scrollMap} setShow={setShowAddActivityPanel} />
+                {
+                    isLoggedIn ?
+                        <AddActivityPanel ref={panelRef} show={showAddActivityPanel} locationCords={addActivityHereCords} scrollMapIntoView={scrollMap} setShow={setShowAddActivityPanel} />
+                        :
+                        <>
+                            <div className={`w-full transition-all overflow-hidden border-b border-white px-5 flex items-center justify-center text-stone-300 text-lg unbounded text-center
+                                ${showAddActivityPanel ? "h-80 py-5" : "h-0"}`}>
+                                    <h1 >Нямаш профил? Регистрирай се <a onClick={()=>{showForm([true,true])}} className="text-amber-600 hover:text-amber-500 cursor-pointer transition-all duration-150">тук.</a></h1>
+                                </div>
+                        </>
+                }
+
                 <h1 className="text-white unbounded text-3xl border-b border-amber-600 w-full mt-5">От днес </h1>
-                {activitiesInfo?.map((e)=>{
-                    return(
-                        <ActivityCard key={e.id} type={e.type} name={e.title} desc={e.desc} by={e.by} exp_date={e.exp_date} id={e.id}/>
+                {activitiesInfo?.map((e) => {
+                    return (
+                        <ActivityCard key={e.id} type={e.type} name={e.title} desc={e.desc} by={e.by} exp_date={e.exp_date} id={e.id} />
                     )
                 })}
             </section>

@@ -76,7 +76,7 @@ export default function Form({ open, isSignup, setShowForm }) {
                 password: password
             })
 
-            if(error){
+            if (error) {
                 alert(error.message)
                 setShowForm([false, false])
                 return
@@ -106,7 +106,7 @@ export default function Form({ open, isSignup, setShowForm }) {
                 }
             })
 
-            if(error){
+            if (error) {
                 alert(error.message)
                 setShowForm([false, false])
                 return
@@ -117,6 +117,24 @@ export default function Form({ open, isSignup, setShowForm }) {
             console.error(err)
         }
     }
+
+    useEffect(() => {
+        if (!open) return
+
+        const handleKeyDown = (e) => {
+            if (e.key === "Enter") {
+                event.preventDefault()
+                handleFormButton()
+            }
+        }
+
+        window.addEventListener("keydown", handleKeyDown)
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown)
+        }
+
+    }, [open])
 
     return (
         <>
