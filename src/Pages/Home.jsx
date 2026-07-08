@@ -1,14 +1,24 @@
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 
 export default function Home() {
+    const [image, setImage] = useState("/Thumbnails/bg_welcomescreen_mobile1.jpg")
     const aboutRef = useRef()
     const navigate = useNavigate()
 
+    useEffect(()=>{
+        if(window.innerWidth < 500){
+            setImage("/Thumbnails/bg_welcomescreen_mobile1.jpg")
+        }else{
+            setImage("/Thumbnails/bg_welcomescreen_desktop1.jpg")
+        }
+    },[])
+
     return (
         <>
-            <section className="w-screen h-[calc(100vh-92px)] flex justify-center items-center bg-black flex-col space-y-1">
+            <section className="w-screen h-[calc(100vh-92px)] flex justify-center items-center bg-black/75 flex-col space-y-1 relative">
+                <img className="absolute w-full h-full object-cover -z-10" src={image}/>
                 <h1 className="text-amber-600 text-5xl unbounded h-15 font-bold">
                     FitMate
                 </h1>
