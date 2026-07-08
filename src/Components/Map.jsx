@@ -8,6 +8,7 @@ import supabase from "../Backend/supabase"
 export default function Map({ setActivityCords, isAddActivity, activityMarkerCords }) {
     const [addActivityHereMarkerCords, setAddActivityHereMarkerCords] = useState()
     const [showSugestion, setShowSugestion] = useState(false)
+    const [mapURL, setMapURL] = useState(`https://api.maptiler.com/maps/outdoor-v4-dark/{z}/{x}/{y}.png?key=${import.meta.env.VITE_MAPTILER_API_KEY}`)
     const bounds = L.geoJSON(BoundsJSON).getBounds()
     const navigate = useNavigate()
 
@@ -79,7 +80,7 @@ export default function Map({ setActivityCords, isAddActivity, activityMarkerCor
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.maptiler.com/">MapTiler</a>'
-                    url={`https://api.maptiler.com/maps/outdoor-v4-dark/{z}/{x}/{y}.png?key=${import.meta.env.VITE_MAPTILER_API_KEY}`}
+                    url={mapURL}
                 />
                 {addActivityHereMarkerCords === undefined ? null :
                     <Marker position={addActivityHereMarkerCords} icon={addActivityHereMarkerIcon}>

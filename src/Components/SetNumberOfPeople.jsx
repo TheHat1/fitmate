@@ -58,7 +58,7 @@ export default function SetNumberOfPeople({ setPeople }) {
             <div className="w-full h-fit flex flex-wrap items-center md:justify-start justify-center">
                 <button
                     onClick={() => handleToggle(-1)} className={` text-white unbounded w-45 h-6 rounded-lg cursor-pointer  transition-all duration-150 hover:-translate-y-1 m-1
-                    ${noLimitToggle ? "bg-amber-600 hover:bg-amber-500" : "bg-gray-600 hover:bg-gray-500"}`}>Неограничено</button>
+                    ${noLimitToggle ? "bg-amber-600 hover:bg-amber-500" : "bg-gray-600 hover:bg-gray-500"}`}>Неограничени</button>
                 <button
                     onClick={() => handleToggle(1)} className={` text-white unbounded w-12 h-6 rounded-lg cursor-pointer  transition-all duration-150 hover:-translate-y-1 m-1
                     ${oneToggle ? "bg-amber-600 hover:bg-amber-500" : "bg-gray-600 hover:bg-gray-500"}`}>1</button>

@@ -12,7 +12,7 @@ import ViewActivitySidePanel from "../Components/ViewActivitySidePanel"
 export default function ProfilePage({ isLoggedIn, showForm, userId }) {
     const [filterBy, setFilterBy] = useState([""])
     const [filterByTime, setFilterByTime] = useState(0)
-    const [filterPostByMe, setFilterPostsByMe] = useState(true)
+    const [filterPostByMe, setFilterPostsByMe] = useState(false)
     const [showAddActivityPanel, setShowAddActivityPanel] = useState(false)
     const [addActivityHereCords, setAddActivityHereCords] = useState()
     const [numberOfPeopleRemaining, setNumberOfPeopleRemaining] = useState(-1)
@@ -184,7 +184,7 @@ export default function ProfilePage({ isLoggedIn, showForm, userId }) {
                 </div>
 
                 <div ref={mapContainerRef} className="w-full h-[50vh] md:h-[70vh] border-b pb-2 border-amber-600">
-                    <Map setActivityCords={setAddActivityHereCords} isAddActivity={showAddActivityPanel} activityMarkerCords={activitiesInfo} />
+                    <Map setActivityCords={setAddActivityHereCords} isAddActivity={isLoggedIn ? showAddActivityPanel : false} activityMarkerCords={activitiesInfo} />
                 </div>
             </section>
             <section className="w-screen h-fit flex justify-start items-start space-y-4 p-7 sm:p-10 pt-0 bg-black flex-col">
