@@ -10,6 +10,8 @@ export default function Home() {
     useEffect(()=>{
         if(window.innerWidth < 500){
             setImage("/Thumbnails/bg_welcomescreen_mobile1.jpg")
+        }else if(window.innerWidth < 1000){
+            setImage("/Thumbnails/bg_welcomescreen_medium1.jpg")
         }else{
             setImage("/Thumbnails/bg_welcomescreen_desktop1.jpg")
         }
