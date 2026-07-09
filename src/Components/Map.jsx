@@ -1,9 +1,10 @@
-import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMap, useMapEvents } from "react-leaflet"
+import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMap, useMapEvents, GeoJSON } from "react-leaflet"
 import BoundsJSON from "../Assets/mapBoundCords.json"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { DivIcon } from "leaflet"
 import supabase from "../Backend/supabase"
+import playfields from "../Assets/playfields.json"
 
 export default function Map({ setActivityCords, isAddActivity, activityMarkerCords }) {
     const [addActivityHereMarkerCords, setAddActivityHereMarkerCords] = useState()
@@ -101,6 +102,13 @@ export default function Map({ setActivityCords, isAddActivity, activityMarkerCor
                 }
 
                 <MapEvents />
+                <GeoJSON
+                    data={playfields}
+                    style={{
+                        color: "#00ba03",
+                        weight: 2,
+                        fillOpacity: 0.4
+                    }} />
             </MapContainer>
         </>
 
